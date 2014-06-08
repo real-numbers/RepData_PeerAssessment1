@@ -69,8 +69,13 @@ forked repository on GitHub. The assignment submission will consist of
 the URL to your GitHub repository and the SHA-1 commit ID for your
 repository state.
 
-How to Fork/clone:    
-1. In terminal,  
+How to Fork/clone:  
+
+1. Go to source repo on GitHub and click on the Fork button  
+
+2. Go to own GitHub and copy the URL of the Forked repo  
+
+1. In terminal, paste URL and add ".git" to clone repo locally    
 > cd ~  
 > git clone https://github.com/real-numbers/RepData_PeerAssessment1.git  
 > cd https://github.com/real-numbers/RepData_PeerAssessment1  
