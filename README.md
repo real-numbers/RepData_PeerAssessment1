@@ -69,6 +69,20 @@ forked repository on GitHub. The assignment submission will consist of
 the URL to your GitHub repository and the SHA-1 commit ID for your
 repository state.
 
+How to Fork/clone:    
+1. In terminal,  
+> cd ~  
+> git clone https://github.com/real-numbers/RepData_PeerAssessment1.git  
+> cd https://github.com/real-numbers/RepData_PeerAssessment1  
+> git add .  
+
+2. Edit some files  
+
+3. Back in terminal:  
+> git add .  
+> git commit -m "comment about update"  
+> git push origin master  
+
 NOTE: The GitHub repository also contains the dataset for the
 assignment so you do not have to download the data separately.
 
