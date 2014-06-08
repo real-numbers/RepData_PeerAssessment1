@@ -76,17 +76,17 @@ How to Fork/clone:
 2. Go to own GitHub and copy the URL of the Forked repo  
 
 1. In terminal, paste URL and add ".git" to clone repo locally    
-> cd ~  
-> git clone https://github.com/real-numbers/RepData_PeerAssessment1.git  
-> cd https://github.com/real-numbers/RepData_PeerAssessment1  
-> git add .  
+\> cd ~  
+\> git clone https://github.com/real-numbers/RepData_PeerAssessment1.git  
+\> cd https://github.com/real-numbers/RepData_PeerAssessment1  
+\> git add .  
 
 2. Edit some files  
 
 3. Back in terminal:  
-> git add .  
-> git commit -m "comment about update"  
-> git push origin master  
+\> git add .  
+\> git commit -m "comment about update"  
+\> git push origin master  
 
 NOTE: The GitHub repository also contains the dataset for the
 assignment so you do not have to download the data separately.
