@@ -120,7 +120,7 @@ grid(NA,NULL,lwd = 2)
 box()
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6.png) 
+![plot of chunk makehist1](figure/makehist1.png) 
   
 ### 2. Calculate and report the mean and median total number of steps taken per day  
 **Rubric:  Is there code to process the data?**  
@@ -141,24 +141,9 @@ head(StepsPerDay)
 ```
 
 ### Report the mean and median: 
-
+The mean is 1.0766 &times; 10<sup>4</sup> and the median is 10765.
 **Rubric:  Are both the mean and median number of steps taken each day reported?** 
-
-```r
-mean(StepsPerDay$steps)
-```
-
-```
-## [1] 10766
-```
-
-```r
-median(StepsPerDay$steps)
-```
-
-```
-## [1] 10765
-```
+NOTE: They are calculated inline in the statement above.
 
 ----  
 
@@ -190,13 +175,13 @@ text(  MaxPt$interval
 grid(NULL,NULL,lwd = 2) 
 ```
 
-![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9.png) 
+![plot of chunk maketsplot](figure/maketsplot.png) 
   
 ### 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?  
 
 **Rubric: Does the report give the 5-minute interval that, on average, contains the maximum number of steps?**  
 
-Here's the answer: MaxPt shows the 5-minute interval containing the maximum number of steps and the maximum # of steps.
+Here's the answer: The 5-minute interval containing the maximum number of steps is 835 and the maximum # of steps is 206.1698, as seen below
 
 
 ```r
@@ -291,7 +276,7 @@ grid(NA,NULL,lwd = 2)
 box()
 ```
 
-![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14.png) 
+![plot of chunk hist2](figure/hist2.png) 
 
 The histogram is only slightly changed compared to the first one.  
 
@@ -349,7 +334,7 @@ text(MaxPt.Imp$interval,MaxPt.Imp$steps
 grid(NULL,NULL,lwd = 2) 
 ```
 
-![plot of chunk unnamed-chunk-16](figure/unnamed-chunk-16.png) 
+![plot of chunk tsplot2](figure/tsplot2.png) 
   
 2. Now which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?  
 **Rubric:  What was the impact of imputing missing values?**
@@ -384,6 +369,6 @@ sp <- ggplot(AvgStepsPerIntervalWkend.Imp, aes(x=interval, y=steps)) + geom_line
 sp + facet_wrap(~weekend, ncol=1)
 ```
 
-![plot of chunk unnamed-chunk-18](figure/unnamed-chunk-18.png) 
+![plot of chunk panelplot](figure/panelplot.png) 
 
 
