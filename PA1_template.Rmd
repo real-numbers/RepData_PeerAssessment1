@@ -14,7 +14,7 @@ temp <- unzip("activity.zip")
 ----   
 
 ## Loading and preprocessing the data  
-**Rubric:  Is there code to read the data?**   
+**Rubric:  There is code presented for reading in the dataset**  
 ```{r readdata,echo=TRUE}
 
 df <- read.csv(file = "activity.csv"
@@ -22,7 +22,7 @@ df <- read.csv(file = "activity.csv"
                , na.strings = "NA"
                )
 ```
-**Rubric:  There is code presented for reading in the dataset**  
+  
 I want a datetime column...   
 
 ```{r makedatetime, echo=TRUE}
@@ -41,7 +41,7 @@ df$datetime<- as.POSIXct(strptime(as.character(df$datetime)
                                   )
                          )
 ```
-... and a Weekday/Weekend factor...  
+... and I'll need a Weekday/Weekend factor for the last plot...  
 
 ```{r makeweekend,echo=TRUE}
 df$weekend <- as.factor(
@@ -58,7 +58,9 @@ Check...
 ```{r takealook,echo=TRUE}
 str(df)
 head(df)
+summary(df)
 ```
+I see that df$steps has 2,304 missing values (NA's) and none of the other columns have any.  
 
 ----  
 
@@ -70,7 +72,7 @@ head(df)
 StepsPerDay <-aggregate(steps~date, data=df, sum, na.rm=TRUE)
 hist(StepsPerDay$steps
      , xlab="Steps Per Day"
-     , main= "Missing Values Removed"
+     , main= "Rows with Missing Values Not Counted"
      , cex.axis=.8
      , labels=TRUE
      , ylim=c(0, 40)
@@ -79,7 +81,8 @@ hist(StepsPerDay$steps
 grid(NA,NULL,lwd = 2) 
 box()
 ```
-Add up the steps for each date...  
+  
+  Add up the steps for each date...  
 
 ```{r makestepsperday,echo=TRUE}
 
@@ -122,16 +125,22 @@ grid(NULL,NULL,lwd = 2)
   
 **Rubric: The 5-minute interval containing the maximum number of steps is reported**  
 
-Here's the answer: The 5-minute interval containing the maximum number of steps is `r MaxPt$interval` and the maximum # of steps is `r MaxPt$steps`, code is shown below...  
+The 5-minute interval containing the maximum **average** number of steps in a five minute interval occurred between 8:30 and 8:35 a.m and was 206 steps, as shown on the plot above and in the snippet below...  
 
 ```{r maximum1,echo=TRUE}
 MaxPt
+```
+  
+  Or, just in case I need to report the **absolute** maximum steps in any interval on any day, it was 806 steps between 6:10 and 6:15 a.m. on 11/27/2012 (the instructions were confusing to me so I'm putting both)...  
+  
+```{r maximum2,echo=TRUE}
+df[which.max(df$steps),]
 ```
 
 ----  
 
 ## Imputing missing values
-Find out how many missing values are in each column of the data...  
+Find out how many missing values are in the data.  I'm just going to find the difference between all rows and complete rows...  
 
 ```{r summarize,echo=TRUE}
 nrow(df)-nrow(df[complete.cases(df),])
@@ -140,11 +149,11 @@ nrow(df)-nrow(df[complete.cases(df),])
 ### 2. Devise a strategy for filling in all of the missing values in the dataset. 
 **Rubric: There is a description of a strategy for imputing missing data.**  
 
-Description:  My strategy is to replace each missing value with the average # of steps during the same 5-minute interval from the days non-missing values for that interval.  
+Description: I know from my summary(df) done above that the only column with NAs is the steps column. My strategy is to replace each missing value of steps with the average # of steps during the same 5-minute interval from the days non-missing values for that interval.  I could use the median, but I prefer to use the mean.  
 
 Please see the code chunk below for the calculation.  
 
-NOTE:  I found this code [here](http://stackoverflow.com/questions/9322773/how-to-replace-na-with-mean-by-subset-in-r-impute-with-plyr).   
+NOTE:  I found this code on StackOverflow, [here](http://stackoverflow.com/questions/9322773/how-to-replace-na-with-mean-by-subset-in-r-impute-with-plyr).   
 
 The new dataset will be named df.imp as shown in the code chunk below.  
 
@@ -163,7 +172,7 @@ nrow(df.imp)-nrow(df.imp[complete.cases(df.imp),])
 ```
 Yes, missing values are gone.  
 
-**Rubric: the histogram is present in the report, for after missing values were imputed.**  
+**Rubric: The histogram is present in the report, using imputed missing values.**  
 
 ```{r hist2, echo=TRUE, fig.height=4, fig.width=8}
   
@@ -180,30 +189,33 @@ grid(NA,NULL,lwd = 2)
 box()
 ```
 
-Observatoion:  The histogram is slightly changed compared to the first one, with more days falling into the 10-15K bin.  
+Observation:  The histogram is slightly changed compared to the first one, with more days falling into the 10-15K bin.  
 
 ## What is the impact of imputing missing data on the estimates of the total daily number of steps?  
 
-Just for further comparison, I also compared the statistics.  
-
+Just for further comparison, I also compared these statistics.  
+1. The totals
 ```{r stats2,echo=TRUE}
 
 c(sum(StepsPerDay$steps,na.rm=TRUE),sum(StepsPerDay.Imp$steps,na.rm=TRUE))
 ```
 The sum of the steps increased due to imputing missing values, as expected.  
-
+2. The averages
 ```{r stats3,echo=TRUE}
 c(mean(StepsPerDay$steps,na.rm=TRUE),mean(StepsPerDay.Imp$steps,na.rm=TRUE))
 ```
 No change to the average per day, thanks to imputing using averages.  
-
+3. The medians
 ```{r stats4,echo=TRUE}
 c(median(StepsPerDay$steps,na.rm=TRUE),median(StepsPerDay.Imp$steps,na.rm=TRUE))
 ```
 No change to the median steps per day.  
-
+4. The maximums
 ```{r newmax,echo=TRUE}
 MaxPt.Imp
+MaxPt
+df.imp[which.max(df.imp$steps),]
+df[which.max(df$steps),]
 ```
 No change to the interval in which the maximum occurred.  
 
