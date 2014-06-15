@@ -1,7 +1,18 @@
 # Reproducible Research: Peer Assessment 1
 ----  
+Set things up...  
 
 
+```r
+library(markdown)
+library(knitr)
+library(plyr)
+library(stringr)
+library(ggplot2)
+
+setwd("~/RepData_PeerAssessment1")
+temp <- unzip("activity.zip")
+```
 ----   
 
 ## Loading and preprocessing the data  
@@ -159,8 +170,8 @@ median(StepsPerDay$steps)
 ```
   
 ----  
-
-##What is the average daily activity pattern?  
+  
+## What is the average daily activity pattern?  
 **Rubric: A time series plot is included and it appears correct.**  
 
 ```r
@@ -217,7 +228,9 @@ df[which.max(df$steps),]
 ----  
 
 ## Imputing missing values
-Find out how many missing values are in the data.  I'm just going to find the difference between all rows and complete rows...  
+### Find out how many missing values are in the data.  
+
+I'm just going to find the difference between all rows and complete rows...  
 
 
 ```r
@@ -228,7 +241,7 @@ nrow(df)-nrow(df[complete.cases(df),])
 ## [1] 2304
 ```
 
-### 2. Devise a strategy for filling in all of the missing values in the dataset. 
+### Devise a strategy for filling in all of the missing values in the dataset. 
 **Rubric: There is a description of a strategy for imputing missing data.**  
 
 Description: I know from my summary(df) done above that the only column with NAs is the steps column. My strategy is to replace each missing value of steps with the average # of steps during the same 5-minute interval from the days non-missing values for that interval.  I could use the median, but I prefer to use the mean.  
@@ -283,7 +296,8 @@ Observation:  The histogram is slightly changed compared to the first one, with 
 
 ## What is the impact of imputing missing data on the estimates of the total daily number of steps?  
 
-Just for further comparison, I also compared these statistics.  
+Just for further comparison, I also compared these four statistics.  
+
 1. The totals
 
 ```r
@@ -294,6 +308,7 @@ c(sum(StepsPerDay$steps,na.rm=TRUE),sum(StepsPerDay.Imp$steps,na.rm=TRUE))
 ## [1] 570608 656738
 ```
 The sum of the steps increased due to imputing missing values, as expected.  
+
 2. The averages
 
 ```r
@@ -304,6 +319,7 @@ c(mean(StepsPerDay$steps,na.rm=TRUE),mean(StepsPerDay.Imp$steps,na.rm=TRUE))
 ## [1] 10766 10766
 ```
 No change to the average per day, thanks to imputing using averages.  
+
 3. The medians
 
 ```r
@@ -313,7 +329,8 @@ c(median(StepsPerDay$steps,na.rm=TRUE),median(StepsPerDay.Imp$steps,na.rm=TRUE))
 ```
 ## [1] 10765 10766
 ```
-Slight change to the median steps per day.  
+Tiny change to the median steps per day.  
+
 4. The maximums
 
 ```r
@@ -372,11 +389,11 @@ sp + facet_wrap(~weekend, ncol=1)
 
 ![plot of chunk panelplot](figure/panelplot.png) 
   
-Conclusion:  It looks like the person's weekday activity started earlier and was greatest in the mornings, while weekend activity started later and then was more spread out throughout the day.   
+Conclusion:  It looks like the person's weekday activity started earlier and was greatest in the mornings, while weekend activity started later and then was more evenly spread out throughout the day.  
 
-** Rubric:  The report contains R code for all of the results presented.**  
+**Rubric:  The report contains R code for all of the results presented.**  
 
-Dear Peer Assessors, I tried to keep it simple for you by sticking to the rubric.  Please leave a comment if you deducted any points.  Thanks!  
+Dear Peer Assessors, I tried to keep it simple by sticking to the rubric.  Please leave a comment if you deducted any points.  Thanks and good luck with your assignment!  
 
 # The End
 
