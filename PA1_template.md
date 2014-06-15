@@ -1,27 +1,11 @@
 # Reproducible Research: Peer Assessment 1
 ----  
 
-Getting ready . . .
- 
 
-```r
-library(markdown)
-library(knitr)
-library(plyr)
-library(stringr)
-library(ggplot2)
-
-setwd("~/RepData_PeerAssessment1")
-temp <- unzip("activity.zip")
-```
 ----   
 
-## Loading and preprocessing the data  
-
-* 1. Read in the data, e.g.* `read.csv()`  
-
+## Reading and preprocessing the data  
 **Rubric:  Is there code to read the data?**   
-
 
 ```r
 df <- read.csv(file = "activity.csv"
@@ -29,10 +13,9 @@ df <- read.csv(file = "activity.csv"
                , na.strings = "NA"
                )
 ```
-
-* 2. Process and transform the data.*  
 **Rubric:  Is there code to process the data?**  
-I thought it would be nice to have a datetime column, good practice working with dates.  
+I want a datetime column...   
+
 
 ```r
 df$datetime<-strptime(paste(df$date
@@ -50,10 +33,7 @@ df$datetime<- as.POSIXct(strptime(as.character(df$datetime)
                                   )
                          )
 ```
-
-* Make a weekend factor column (I'm assuming R is set up for English language here)*  
-
-**Rubric:  Is there code to process the data?**  
+... and a Weekday/Weekend factor...  
 
 
 ```r
@@ -66,7 +46,7 @@ df$weekend <- ordered(df$weekend,
                      labels = c("Weekend", "Weekday"))
 ```
 
-Now let's see what we've got . . .  
+Check...  
 
 
 ```r
@@ -95,14 +75,12 @@ head(df)
 ## 5    NA 2012-10-01       20 2012-10-01 00:20:00 Weekday
 ## 6    NA 2012-10-01       25 2012-10-01 00:25:00 Weekday
 ```
+  
+  Looks good - ready to start analysis!  
 
-Looks good - ready to start analysis!
 ----  
 
 ## What is mean total number of steps taken per day?  
-*For this part of the assignment, you can ignore the missing values in the dataset.*  
-
-### 1. Make a histogram of the total number of steps taken each day
 **Rubric:  Is there a histogram and code for the histogram?**  
 
 
@@ -121,9 +99,8 @@ box()
 ```
 
 ![plot of chunk makehist1](figure/makehist1.png) 
-  
-### 2. Calculate and report the mean and median total number of steps taken per day  
-**Rubric:  Is there code to process the data?**  
+Add up the steps for each date...  
+
 
 ```r
 StepsPerDay <-aggregate(steps~date, data=df, sum, na.rm=TRUE)
@@ -140,23 +117,35 @@ head(StepsPerDay)
 ## 6 2012-10-07 11015
 ```
 
-### Report the mean and median: 
-The mean is 1.0766 &times; 10<sup>4</sup> and the median is 10765.
-**Rubric:  Are both the mean and median number of steps taken each day reported?** 
-NOTE: They are calculated inline in the statement above.
+###Report the mean and median: 
+**Rubric:  Are both the mean and median number of steps taken each day reported?**  
 
+```r
+mean(StepsPerDay$steps)
+```
+
+```
+## [1] 10766
+```
+
+```r
+median(StepsPerDay$steps)
+```
+
+```
+## [1] 10765
+```
+  
 ----  
 
-## What is the average daily activity pattern?
-
-### 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)  
-
+##What is the average daily activity pattern?  
 **Rubric: Is there a time series plot of the average number of steps taken (averaged across all days) versus the 5-minute intervals?**  
 
 ```r
 AvgStepsPerInterval <- aggregate(steps~interval, data=df,mean,na.rm=TRUE)
 
-MaxPt <-AvgStepsPerInterval[AvgStepsPerInterval$steps==max(AvgStepsPerInterval$steps),]
+MaxPt <-AvgStepsPerInterval[AvgStepsPerInterval$steps==
+                                    max(AvgStepsPerInterval$steps),]
 
 plot(  AvgStepsPerInterval$interval
      , AvgStepsPerInterval$steps
@@ -177,11 +166,9 @@ grid(NULL,NULL,lwd = 2)
 
 ![plot of chunk maketsplot](figure/maketsplot.png) 
   
-### 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?  
-
 **Rubric: Does the report give the 5-minute interval that, on average, contains the maximum number of steps?**  
 
-Here's the answer: The 5-minute interval containing the maximum number of steps is 835 and the maximum # of steps is 206.1698, as seen below
+Here's the answer: The 5-minute interval containing the maximum number of steps is 835 and the maximum # of steps is 206.1698, as shown below...  
 
 
 ```r
@@ -196,12 +183,7 @@ MaxPt
 ----  
 
 ## Imputing missing values
-*Note that there are a number of days/intervals where there are missing values (coded as NA).* 
-
-### 1. Calculate and report the total number of missing values in the dataset  
-
-The NA count can be seen here . . .  
-**Rubric: Does the report show all of the R code needed to reproduce the results (numbers, plots, etc.) in the report?**  
+Find out how many missing values are in each column of the data...  
 
 
 ```r
@@ -214,16 +196,15 @@ summary(df$steps)
 ```
 
 ### 2. Devise a strategy for filling in all of the missing values in the dataset. 
-**Rubric: Does the report *describe* and show with code a strategy for imputing missing data?**  
+**Rubric: Does the report *describe* a strategy for imputing missing data?**  
 
-Describe:  My strategy is to replace each missing value with the average # of steps during the same interval from the non-missing rows.  Please see the code chunk below for the calculation.
-
-### 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.  
- 
-The new dataset will be named df.imp as shown in the code chunk below.
+Describe:  My strategy is to replace each missing value with the average # of steps during the same interval from the non-missing rows.  Please see the code chunk below for the calculation.  
 
 NOTE:  I found this code [here](http://stackoverflow.com/questions/9322773/how-to-replace-na-with-mean-by-subset-in-r-impute-with-plyr).   
-**Rubric: Does the report describe and *show with code* a strategy for imputing missing data?**  
+
+The new dataset will be named df.imp as shown in the code chunk below.  
+
+**Rubric: Does the report *show with code* a strategy for imputing missing data?**  
 
 
 ```r
@@ -232,7 +213,7 @@ df.imp <- ddply(df, ~ interval, transform, steps = impute.mean(steps))
 df.imp<-df.imp[order(df.imp$date,df.imp$interval), ] 
 ```
 
-Now compare the two data frames.  df has NA's and df.imp does not.  
+Now compare the two data frames to verify no more NAs...  
 
 
 ```r
@@ -255,10 +236,6 @@ summary(df$steps)
 
 Result:  The mean and median were unaffected but the 3rd Quartile increased by 15.  Not at all surprising given the imputation calculation as interval averages.
 
-### 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day.  
-### Do these values differ from the estimates from the first part of the assignment? 
-### What is the impact of imputing missing data on the estimates of the total daily number of steps?  
-
 **Rubric: Does the report contain a histogram of the total number of steps taken each day after missing values were imputed?**  
 
 
@@ -280,7 +257,7 @@ box()
 
 The histogram is only slightly changed compared to the first one.  
 
-Just for further comparison, I also compared the statistics and did another time series plot.
+Just for further comparison, I also compared the statistics.  
 
 
 ```r
@@ -307,36 +284,9 @@ c(median(StepsPerDay$steps,na.rm=TRUE),median(StepsPerDay.Imp$steps,na.rm=TRUE))
 ## [1] 10765 10766
 ```
 
-The mean and median were hardly affected at all, but the sum increased by over 86K steps (about 8 days' worth).  
 
 ## What is the impact of imputing missing data on the estimates of the total daily number of steps?  
 
-Now look at the new time series plot . . .
-
-
-```r
-AvgStepsPerInterval.Imp <- aggregate(steps~interval, data=df.imp,mean)
-
-MaxPt.Imp <-AvgStepsPerInterval.Imp[AvgStepsPerInterval.Imp$steps==max(AvgStepsPerInterval.Imp$steps),]
-
-plot(AvgStepsPerInterval.Imp$interval,AvgStepsPerInterval.Imp$steps
-     ,type='l' ,xlab="Interval",main="Avg Steps per Interval, Missing Values Imputed"
-     ,ylab= "Average # Steps", col="blue")
-text(MaxPt.Imp$interval,MaxPt.Imp$steps
-     , paste("Max ="
-             ,trunc(MaxPt.Imp$steps,0)
-             ,"steps @ interval"
-             , MaxPt$interval
-     ), cex=.8
-     , pos=4
-     , col="red"
-    )
-grid(NULL,NULL,lwd = 2) 
-```
-
-![plot of chunk tsplot2](figure/tsplot2.png) 
-  
-2. Now which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?  
 **Rubric:  What was the impact of imputing missing values?**
 
 ```r
@@ -357,8 +307,6 @@ The maximum point stayed the same as before.  Not surprising given the imputatio
 ### Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day. 
 
 **NOTE TO ASSESSOR: The weekend column was created during the pre-processing phase at the top of this page.**  
-
-### Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).  
 
 **Rubric: Does the report contain a panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends?**  
 
