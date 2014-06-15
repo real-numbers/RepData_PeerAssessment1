@@ -313,7 +313,7 @@ c(median(StepsPerDay$steps,na.rm=TRUE),median(StepsPerDay.Imp$steps,na.rm=TRUE))
 ```
 ## [1] 10765 10766
 ```
-No change to the median steps per day.  
+Slight change to the median steps per day.  
 4. The maximums
 
 ```r
@@ -371,7 +371,8 @@ sp + facet_wrap(~weekend, ncol=1)
 ```
 
 ![plot of chunk panelplot](figure/panelplot.png) 
-Conclusion:  It looks like the person's weekday activity was greater in the mornings, while weekend activity was more spread out throughout the day, on average.   
+  
+Conclusion:  It looks like the person's weekday activity started earlier and was greatest in the mornings, while weekend activity started later and then was more spread out throughout the day.   
 
 ** Rubric:  The report contains R code for all of the results presented.**  
 

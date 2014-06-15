@@ -209,7 +209,7 @@ No change to the average per day, thanks to imputing using averages.
 ```{r stats4,echo=TRUE}
 c(median(StepsPerDay$steps,na.rm=TRUE),median(StepsPerDay.Imp$steps,na.rm=TRUE))
 ```
-No change to the median steps per day.  
+Slight change to the median steps per day.  
 4. The maximums
 ```{r newmax,echo=TRUE}
 MaxPt.Imp
@@ -234,7 +234,8 @@ AvgStepsPerIntervalWkend.Imp <- aggregate(steps~interval+weekend, data=df.imp,me
 sp <- ggplot(AvgStepsPerIntervalWkend.Imp, aes(x=interval, y=steps)) + geom_line()+ ylab("Number of Steps")
 sp + facet_wrap(~weekend, ncol=1)
 ```
-Conclusion:  It looks like the person's weekday activity was greater in the mornings, while weekend activity was more spread out throughout the day, on average.   
+  
+Conclusion:  It looks like the person's weekday activity started earlier and was greatest in the mornings, while weekend activity started later and then was more spread out throughout the day.   
 
 ** Rubric:  The report contains R code for all of the results presented.**  
 
